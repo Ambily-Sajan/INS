@@ -46,29 +46,29 @@ namespace Assesment_AmbilySajan.Controllers
         //Edit a Record of AOColumn
         [HttpPut("id")]
 
-        public async Task<IActionResult> EditColumn([FromRoute] Guid id, [FromBody] Aocolumn updatecolumn)
+        public async Task<IActionResult> EditColumn([FromRoute] Guid id, [FromBody] Aocolumn aocolumn)
         {
             try
             {
-                var exist = await tableDbContext.AOColumn.FindAsync(id);
-                if (exist == null)
+                var column = await tableDbContext.AOColumn.FindAsync(id);
+                if (column == null)
                 {
                     return NotFound("No record found");
                 }
-                exist.Id = id;
-                exist.TableId = updatecolumn.TableId ?? exist.TableId;
-                exist.Name = updatecolumn.Name ?? exist.Name;
-                exist.Type = updatecolumn.Type ?? exist.Type;
-                exist.Description = updatecolumn.Description ?? exist.Description;
-                exist.DataType = updatecolumn.DataType ?? exist.DataType;
-                exist.DataSize = updatecolumn.DataSize ?? exist.DataSize;
-                exist.DataScale = updatecolumn.DataScale ?? exist.DataScale;
-                exist.Comment = updatecolumn.Comment ?? exist.Comment;
-                exist.Encrypted = updatecolumn.Encrypted ?? exist.Encrypted;
-                exist.Distortion = updatecolumn.Distortion ?? exist.Distortion;
+                column.Id = id;
+                column.TableId = aocolumn.TableId ?? column.TableId;
+                column.Name = aocolumn.Name ?? column.Name;
+                column.Type = aocolumn.Type ?? column.Type;
+                column.Description = aocolumn.Description ?? column.Description;
+                column.DataType = aocolumn.DataType ?? column.DataType;
+                column.DataSize = aocolumn.DataSize ?? column.DataSize;
+                column.DataScale = aocolumn.DataScale ?? column.DataScale;
+                column.Comment = aocolumn.Comment ?? column.Comment;
+                column.Encrypted = aocolumn.Encrypted ?? column.Encrypted;
+                column.Distortion = aocolumn.Distortion ?? column.Distortion;
 
                 await tableDbContext.SaveChangesAsync();
-                return Ok(exist);
+                return Ok(column);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,8 @@ namespace Assesment_AmbilySajan.Controllers
         }
 
         //Delete the Record From AOColumn
-        [HttpDelete("id")]
+        [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteColumn([FromRoute] Guid id)
         {
             try
@@ -99,7 +100,7 @@ namespace Assesment_AmbilySajan.Controllers
 
         //Get All Records By DataType
         [HttpGet]
-        public async Task<ActionResult<List<Aocolumn>>> GetDataType([FromQuery] List<string?> datatypes)
+        public async Task<ActionResult<List<Aocolumn>>> GetAOColumnByDataType([FromQuery] List<string?> datatypes)
         {
             try
             {
