@@ -24,7 +24,7 @@ namespace Assesment_AmbilySajan.Controllers
         // Add a new record to AOTable
         [HttpPost]
         [Route("AddRecord")]
-        public async Task<IActionResult> AddNewTable([FromBody]Aotables table)
+        public async Task<IActionResult> AddNewTable([FromBody] Aotables table)
         {
             try
             {
@@ -33,16 +33,17 @@ namespace Assesment_AmbilySajan.Controllers
                 await tableDbContext.SaveChangesAsync();
                 return Ok(table);
             }
-            catch {
-                return BadRequest("Error Found,Exception Caught While Adding");
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
         // Update a record in AOTables by Id
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAotable(Guid id, [FromBody] Aotables table)
+        public async Task<IActionResult> UpdateAotable([FromRoute] Guid id, [FromBody] Aotables updatetable)
         {
-            
+
 
             try
             {
@@ -54,44 +55,44 @@ namespace Assesment_AmbilySajan.Controllers
                 }
 
                 // Updating values
-                existingAotable.Name = table.Name;
-                existingAotable.Type = table.Type;
-                existingAotable.Description = table.Description;
-                existingAotable.Comment = table.Comment;
-                existingAotable.History = table.History;
-                existingAotable.Boundary = table.Boundary;
-                existingAotable.Log = table.Log;
-                existingAotable.Cache = table.Cache;
-                existingAotable.Notify = table.Notify;
-                existingAotable.Identifier = table.Identifier;
+                existingAotable.Name = updatetable.Name ?? existingAotable.Name;
+                existingAotable.Type = updatetable.Type ?? existingAotable.Type;
+                existingAotable.Description = updatetable.Description ?? existingAotable.Description;
+                existingAotable.Comment = updatetable.Comment ?? existingAotable.Comment;
+                existingAotable.History = updatetable.History ?? existingAotable.History;
+                existingAotable.Boundary = updatetable.Boundary ?? existingAotable.Boundary;
+                existingAotable.Log = updatetable.Log ?? existingAotable.Log;
+                existingAotable.Cache = updatetable.Cache ?? existingAotable.Cache;
+                existingAotable.Notify = updatetable.Notify ?? existingAotable.Notify;
+                existingAotable.Identifier = updatetable.Identifier ?? existingAotable.Identifier;
 
                 tableDbContext.Entry(existingAotable).State = EntityState.Modified;
                 await tableDbContext.SaveChangesAsync();
 
                 return Ok(existingAotable);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception caught While updating");
+                return StatusCode(500, ex.Message);
             }
         }
 
         //Get All Records of Type Schedule or policy
         [HttpGet]
-        [Route("GetSchedulePolicy")]
-        public async Task<ActionResult<List<Aotables>>> GetSchedulePolicy()
+        [Route("GetAOTableType")]
+        public async Task<ActionResult<List<Aotables>>> GetAOTableType()
         {
             try
             {
-                var rcds = await tableDbContext.AOTable.Where(t => t.Type == "schedule" || t.Type == "policy").ToListAsync();
-                return Ok(rcds);
+                var records = await tableDbContext.AOTable.Where(t => t.Type == "schedule" || t.Type == "policy").ToListAsync();
+                return Ok(records);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception Caught on Retrieval");
+                return StatusCode(500, ex.Message);
             }
-            
-            
+
+
         }
     }
 }
@@ -102,5 +103,5 @@ namespace Assesment_AmbilySajan.Controllers
 
 
 
-    
+
 

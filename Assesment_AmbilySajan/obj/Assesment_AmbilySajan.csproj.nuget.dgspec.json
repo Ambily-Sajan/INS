@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj": {}
+    "D:\\Git INS\\INS\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj": {}
   },
   "projects": {
-    "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj": {
+    "D:\\Git INS\\INS\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj",
+        "projectUniqueName": "D:\\Git INS\\INS\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj",
         "projectName": "Assesment_AmbilySajan",
-        "projectPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj",
+        "projectPath": "D:\\Git INS\\INS\\Assesment_AmbilySajan\\Assesment_AmbilySajan.csproj",
         "packagesPath": "C:\\Users\\ambily.sajan\\.nuget\\packages\\",
-        "outputPath": "D:\\INS\\Training\\ASP.Net\\sampleProject\\API\\Assesment_AmbilySajan\\obj\\",
+        "outputPath": "D:\\Git INS\\INS\\Assesment_AmbilySajan\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

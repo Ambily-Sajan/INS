@@ -10,48 +10,47 @@ namespace Assesment_AmbilySajan.Controllers
     [ApiController]
     public class AocolumnController : ControllerBase
     {
-        private readonly TableDbCOntext columnDbContext;
-        public AocolumnController(TableDbCOntext columnDbContext)
+        private readonly TableDbCOntext tableDbContext;
+        public AocolumnController(TableDbCOntext tableDbContext)
         {
-            this.columnDbContext = columnDbContext;
+            this.tableDbContext = tableDbContext;
         }
 
         //Add a column for the AOTable record 
         [HttpPost]
         [Route("AddColumn")]
-        public async Task<IActionResult> AddColumn(Aocolumn aocolumn)
+        public async Task<IActionResult> AddColumn([FromBody] Aocolumn aocolumn)
         {
-            
+
             try
             {
-                var aotable = columnDbContext.AOTable.Find(aocolumn.TableId);
+                var aotable = tableDbContext.AOTable.Find(aocolumn.TableId);
 
                 if (aotable == null)
                 {
                     return NotFound("AOTable record not found");
                 }
                 aocolumn.Id = Guid.NewGuid();
-                columnDbContext.AOColumn.Add(aocolumn);
-                await columnDbContext.SaveChangesAsync();
+                tableDbContext.AOColumn.Add(aocolumn);
+                await tableDbContext.SaveChangesAsync();
 
                 return Ok("Inserted Column!");
             }
-            catch
+            catch (Exception ex)
             {
-
-                return BadRequest("Exception Caught on Adding Column");
+                return StatusCode(500, ex.Message);
             }
 
         }
 
         //Edit a Record of AOColumn
-       [HttpPut("id")]
-        
-        public async Task<IActionResult> EditColumn(Guid id, [FromBody] Aocolumn updatecolumn)
+        [HttpPut("id")]
+
+        public async Task<IActionResult> EditColumn([FromRoute] Guid id, [FromBody] Aocolumn updatecolumn)
         {
             try
             {
-                var exist = await columnDbContext.AOColumn.FindAsync(id);
+                var exist = await tableDbContext.AOColumn.FindAsync(id);
                 if (exist == null)
                 {
                     return NotFound("No record found");
@@ -68,48 +67,50 @@ namespace Assesment_AmbilySajan.Controllers
                 exist.Encrypted = updatecolumn.Encrypted ?? exist.Encrypted;
                 exist.Distortion = updatecolumn.Distortion ?? exist.Distortion;
 
-                await columnDbContext.SaveChangesAsync();
+                await tableDbContext.SaveChangesAsync();
                 return Ok(exist);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception Caught while updating column records");
+                return StatusCode(500, ex.Message);
             }
         }
 
         //Delete the Record From AOColumn
         [HttpDelete("id")]
-        public async Task<IActionResult> DeleteColumn(Guid id)
+        public async Task<IActionResult> DeleteColumn([FromRoute] Guid id)
         {
             try
             {
-                var coldel = await columnDbContext.AOColumn.FindAsync(id);
-                if (coldel == null)
+                var columndelete = await tableDbContext.AOColumn.FindAsync(id);
+                if (columndelete == null)
                 {
                     return NotFound("Column Not Found");
                 }
-                columnDbContext.AOColumn.Remove(coldel);
-                await columnDbContext.SaveChangesAsync();
+                tableDbContext.AOColumn.Remove(columndelete);
+                await tableDbContext.SaveChangesAsync();
                 return Ok("Deleted Successfully");
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception Caught While Deleting Column");
+                return StatusCode(500, ex.Message);
             }
         }
 
-        //Get records of DataType 
+        //Get All Records By DataType
         [HttpGet]
-        public async Task<ActionResult<Aocolumn>> GetDataType([FromQuery] List<string?> datatypes)
+        public async Task<ActionResult<List<Aocolumn>>> GetDataType([FromQuery] List<string?> datatypes)
         {
             try
             {
-                var tb = await columnDbContext.AOColumn.Where(c => datatypes.Contains(c.DataType)).ToListAsync();
-                return Ok(tb);
+
+                var records = await tableDbContext.AOColumn.Where(c => datatypes.Contains(c.DataType)).ToListAsync();
+
+                return Ok(records);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception Caught During Retrieval of DataType");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -119,28 +120,28 @@ namespace Assesment_AmbilySajan.Controllers
         {
             try
             {
-                var tables = await columnDbContext.AOTable.FirstOrDefaultAsync(n => n.Name == name);
+                var tables = await tableDbContext.AOTable.FirstOrDefaultAsync(n => n.Name == name);
                 if (tables == null)
                 {
                     return NotFound("Table Not found");
                 }
-                var column = columnDbContext.AOColumn.Where(c => c.TableId == tables.Id).ToList();
+                var column = tableDbContext.AOColumn.Where(c => c.TableId == tables.Id).ToList();
                 if (column == null)
                 {
-                    return NotFound("No rcds");
+                    return NotFound("No Records");
                 }
                 return Ok(column);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Exception Caught on Retrieving Column based on Table Name");
+                return StatusCode(500, ex.Message);
             }
 
 
 
         }
 
-        
+
 
     }
 }
